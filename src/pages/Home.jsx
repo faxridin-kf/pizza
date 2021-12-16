@@ -1,22 +1,25 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { PizzaBlock, Category, SortPopup } from '../conmonents';
+import { setCategory } from '../redux/actions/fillters';
 import PropTypes from 'prop-types';
-export default function Home({ items }) {
-  console.log(items, 'hello');
+const categoryName = ['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+const sortItems = [
+  { name: 'популярности', type: 'popular' },
+  { name: 'цене', type: 'price' },
+  { name: 'алфавиту', type: 'alphabet' },
+];
+export default function Home() {
+  const dispatch = useDispatch();
+  const items = useSelector(({ pizzas }) => pizzas.items);
+  const onSelectCategory = React.useCallback((index) => {
+    dispatch(setCategory(index));
+  }, []);
   return (
     <div className="container">
       <div className="content__top">
-        <Category
-          onClickItem={(nam) => console.log(nam)}
-          items={['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']}
-        />
-        <SortPopup
-          items={[
-            { name: 'популярности', type: 'popular' },
-            { name: 'цене', type: 'price' },
-            { name: 'алфавиту', type: 'alphabet' },
-          ]}
-        />
+        <Category onClickItem={onSelectCategory} items={categoryName} />
+        <SortPopup items={sortItems} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
@@ -45,7 +48,11 @@ PizzaBlock.propTypes = {
 PizzaBlock.defaultProps = {
   name: 'Скоро в продаже',
   sizes: '',
+  price: 0,
   imageUrl:
     'https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/6652fec1-04df-49d8-8744-232f1032c44b.jpg',
   types: [],
 };
+
+
+// npx json-server --watch public/db.json
