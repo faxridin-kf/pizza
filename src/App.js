@@ -1,27 +1,18 @@
 import React from 'react'
-import axios from 'axios'
-// import { useSelector, useDispatch } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { Route } from 'react-router-dom';
 import { Header } from './conmonents'
 import { Home, Card } from './pages'
-import { setPizzas } from './redux/actions/pizzas'
 // style
 import './assets/app.scss'
 
 function App() {
-  const dispatch = useDispatch();
-  React.useEffect(() => {
-    axios.get('http://localhost:3001/pizzzas').then(({ data }) => {
-      dispatch(setPizzas(data))
-    })
-  }, [])
   return (
     <div>
       <div className="wrapper">
         <Header />
         <div className="content">
-          <Home />
-          <Card />
+          <Route path="/" component={Home} exact />
+          <Route path="/card" component={Card} exact />
         </div>
       </div>
     </div>
